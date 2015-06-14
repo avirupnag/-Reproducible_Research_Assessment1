@@ -30,6 +30,7 @@ head(activity.data)
 names(activity.data)
 activity.data.noNA <- na.omit(activity.data)
 head(activity.data.noNA)
+
 ```
 
 ### What is mean total number of steps taken per day?
@@ -39,12 +40,14 @@ head(activity.data.noNA)
 ```{r}
 Total.Steps.per.Day <- aggregate(steps ~ date, data = activity.data.noNA, sum)
 Total.Steps.per.Day
+
 ```
 
 #### 2. Histogram of the total number of steps taken each day
 
 ```{r}
 ggplot(activity.data.noNA, aes(date, steps)) + geom_bar(stat = "identity", colour = "#00C0AF", fill = "#00C0AF", width = .6) + labs(title = "Histogram of Total Number of Steps Taken Each Day", x = "Date", y = "Total number of steps")
+
 ```
 
 #### 3. Mean and median of the total number of steps taken per day
@@ -53,6 +56,7 @@ Mean:
 ```{r}
 Total.Steps <- aggregate(activity.data.noNA$steps, list(Date = activity.data.noNA$date), FUN = "sum")$x
 mean(Total.Steps)
+
 ```
 
 Median:
@@ -67,6 +71,7 @@ median(Total.Steps)
 ```{r}
 Time.Series <- tapply(activity.data.noNA$steps, activity.data.noNA$interval, mean)
 plot(row.names(Time.Series), Time.Series, type = "l", xlab = "5-minute interval", ylab = "Average across all Days", main = "Average number of steps taken",     col = "#E58700")
+
 ```
 
 #### 2. 5-minute interval, on average across all the days in the dataset, having the maximum number of steps
@@ -74,6 +79,7 @@ plot(row.names(Time.Series), Time.Series, type = "l", xlab = "5-minute interval"
 ```{r}
 Max.Interval <- which.max(Time.Series)
 names(Max.Interval)
+
 ```
 
 ### Imputing missing values
@@ -98,7 +104,6 @@ for (i in 1:nrow(activity.data)) {
     }
     fill.NA <- c(fill.NA, steps)
 }
-
 ```
 
 #### 3. Create a new dataset that is equal to the original dataset but with the missing data filled in
@@ -116,6 +121,7 @@ ggplot(new.activity.data, aes(date, steps)) + geom_bar(stat = "identity",
                                              colour = "#B983FF",
                                              fill = "#B983FF",
                                              width = 0.6) + labs(title = "Histogram of Total Number of Steps Taken Each Day (no missing data)", x = "Date", y = "Total number of steps")
+
 ```
 
 #### Do these values differ from the estimates from the first part of the assignment?
@@ -138,7 +144,6 @@ Old.Median <- median(Total.Steps)
 New.Mean - Old.Mean
 
 New.Median - Old.Median
-
 ```
 
 After replacing the mean is the same but the median is a little bit different
@@ -166,4 +171,5 @@ Steps.By.Days <- aggregate(steps ~ interval + weekDays, data = new.activity.data
 names(Steps.By.Days) <- c("interval", "daylevel", "steps")
 xyplot(steps ~ interval | daylevel, Steps.By.Days, type = "l", layout = c(1, 2), 
     xlab = "Interval", ylab = "Number of steps")
+
 ```
